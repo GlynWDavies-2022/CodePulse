@@ -7,4 +7,6 @@ import { RouterLink } from '@angular/router';
   templateUrl: './category-list.html',
   styleUrl: './category-list.css',
 })
-export class CategoryList {}
+export class CategoryList {
+  // Todo...
+}

@@ -17,7 +17,7 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateCategory(CreateCategoryRequestDTO request)
+    public async Task<ActionResult> CreateCategory(CreateCategoryRequestDTO request)
     {
         var category = new Category
         {
@@ -35,5 +35,27 @@ public class CategoriesController : ControllerBase
         };
 
         return Ok(categoryDTO);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetAllCategories()
+    {
+        var categories = await _categoryRepository.GetAllCategoriesAsync();
+
+        var response = new List<CategoryDTO>();
+
+        foreach (var category in categories)
+        {
+            var categoryDTO = new CategoryDTO
+            {
+                Id = category.Id,
+                Name = category.Name,
+                UrlHandle = category.UrlHandle
+            };
+
+            response.Add(categoryDTO);
+        }
+
+        return Ok(categories);
     }
 }

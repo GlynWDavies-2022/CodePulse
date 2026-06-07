@@ -17,7 +17,7 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateCategory(CreateCategoryRequestDTO request)
+    public async Task<ActionResult> CreateCategory([FromBody] CreateCategoryRequestDTO request)
     {
         var category = new Category
         {
@@ -57,5 +57,25 @@ public class CategoriesController : ControllerBase
         }
 
         return Ok(categories);
+    }
+
+    [HttpGet("{id:Guid}")]
+    public async Task<ActionResult<CategoryDTO?>> GetCategoryById([FromRoute] Guid id)
+    {
+        var category = await _categoryRepository.GetCategoryById(id);
+
+        if (category == null)
+        {
+            return NotFound();
+        }
+
+        var categoryDTO = new CategoryDTO
+        {
+            Id = category.Id,
+            Name = category.Name,
+            UrlHandle = category.UrlHandle
+        };
+
+        return Ok(categoryDTO);
     }
 }

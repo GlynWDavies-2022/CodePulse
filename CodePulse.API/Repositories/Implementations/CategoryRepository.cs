@@ -30,4 +30,11 @@ public class CategoryRepository : ICategoryRepository
 
         return categories;
     }
+
+    public async Task<Category?> GetCategoryById(Guid id)
+    {
+        var category = await _applicationDbContext.Categories.FirstOrDefaultAsync(c => c.Id == id);
+        
+        return category;
+    }
 }

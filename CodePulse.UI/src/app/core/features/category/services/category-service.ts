@@ -1,5 +1,5 @@
 import { HttpClient, httpResource } from '@angular/common/http';
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, InputSignal, inject, signal } from '@angular/core';
 import { AddCategoryRequest, Category } from '../models/category.model';
 
 @Injectable({
@@ -31,6 +31,10 @@ export class CategoryService {
 
   getAllCategories() {
     return httpResource<Category[]>(() => `${this.apiBaseUrl}/api/categories`);
+  }
+
+  getCategoryById(id: InputSignal<string | undefined>) {
+    return httpResource<Category>(() => `${this.apiBaseUrl}/api/categories/${id()}`);
   }
 
 }

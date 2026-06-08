@@ -31,10 +31,26 @@ public class CategoryRepository : ICategoryRepository
         return categories;
     }
 
-    public async Task<Category?> GetCategoryById(Guid id)
+    public async Task<Category?> GetCategoryByIdAsync(Guid id)
     {
         var category = await _applicationDbContext.Categories.FirstOrDefaultAsync(c => c.Id == id);
         
+        return category;
+    }
+
+    public async Task<Category?> UpdateCategoryAsync(Guid id, Category category)
+    {
+        var categoryToUpdate = _applicationDbContext.Categories.FirstOrDefault(c => c.Id == id);
+
+        if (categoryToUpdate == null)
+        {
+            return null;
+        }
+
+        _applicationDbContext.Entry(categoryToUpdate).CurrentValues.SetValues(category);
+
+        await _applicationDbContext.SaveChangesAsync();
+
         return category;
     }
 }

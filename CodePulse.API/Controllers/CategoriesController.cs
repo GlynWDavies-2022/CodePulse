@@ -62,7 +62,7 @@ public class CategoriesController : ControllerBase
     [HttpGet("{id:Guid}")]
     public async Task<ActionResult<CategoryDTO?>> GetCategoryById([FromRoute] Guid id)
     {
-        var category = await _categoryRepository.GetCategoryById(id);
+        var category = await _categoryRepository.GetCategoryByIdAsync(id);
 
         if (category == null)
         {
@@ -77,5 +77,25 @@ public class CategoriesController : ControllerBase
         };
 
         return Ok(categoryDTO);
+    }
+
+    [HttpPut("{id:Guid}")]
+    public async Task<IActionResult> UpdateCategory([FromRoute] Guid id, [FromBody] UpdateCategoryRequestDTO request)
+    {
+        var category = new Category
+        {
+            Id = id,
+            Name = request.Name,
+            UrlHandle = request.UrlHandle
+        };
+
+        var updatedCategory = await _categoryRepository.UpdateCategoryAsync(id, category);
+
+        if (updatedCategory == null)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
     }
 }

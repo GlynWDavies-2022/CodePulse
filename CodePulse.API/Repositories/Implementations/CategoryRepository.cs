@@ -24,6 +24,7 @@ public class CategoryRepository : ICategoryRepository
         return category;
     }
 
+
     public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
     {
         var categories = await _applicationDbContext.Categories.ToListAsync();
@@ -52,5 +53,20 @@ public class CategoryRepository : ICategoryRepository
         await _applicationDbContext.SaveChangesAsync();
 
         return category;
+    }
+    public async Task<Category?> DeleteCategoryAsync(Guid id)
+    {
+        var categoryToDelete = await _applicationDbContext.Categories.FirstOrDefaultAsync(c => c.Id == id);
+
+        if (categoryToDelete == null)
+        {
+            return null;
+        }
+
+        _applicationDbContext.Categories.Remove(categoryToDelete);
+
+        await _applicationDbContext.SaveChangesAsync();
+
+        return categoryToDelete;
     }
 }
